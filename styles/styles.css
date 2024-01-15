@@ -16,12 +16,36 @@ body{
             border-radius: 40px;
         }
             .visor{
-                padding: 10px 10px 30px 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                height: 80px;
+                width: 385px;
                 margin: 5px 5px 5px 5px;
                 font-size: larger;
                 border: 2px solid #332941;
                 border-radius: 15px;
+                background-color: aliceblue;
             }
+                .expresion{
+                    overflow: auto;
+                    height: 35px;
+                    width: 365px;
+                    text-align: end;
+                    margin: 0;
+                    scrollbar-color: aliceblue;
+                    -ms-overflow-style: none; 
+                     scrollbar-width: none; 
+                }
+
+                .resultado{
+                    overflow: auto;
+                    height: 20px;
+                    width: 365px;
+                    text-align: end;
+                    margin: 0;
+                }
 
             .conteiner-botones{
                 display: flex;
