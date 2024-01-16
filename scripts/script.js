@@ -72,7 +72,7 @@ function returnResult(){
     second_operand.value = "",second_operand.ready = 0;
 }
 
-function clearAll(){
+function clearAllVisor(){
     expresion.textContent = "";
     result = "";
     first_operand.value = ""; first_operand.ready = 0;
@@ -80,21 +80,22 @@ function clearAll(){
     resultado.textContent = "";
 }
 
+function loadOp(event_code){
+    setOperandReady(event_code);
+    parseSymbols(event_code);
+    writeExpresion(event_code);
+}
+
 function userComunication(event){
     let event_code = (event.type==="keydown")?event.key:event.target.textContent;
     event_code = (event_code==="*")?"x":event_code;
-    if(event_code>=0 && event_code<=9){ 
-        setOperandReady(event_code);
-        parseSymbols(event_code);
-        writeExpresion(event_code);
-    } else if(event_code==="+"||event_code==="-"||event_code==="/" || event_code==="." || event_code === "x"){
+
+    if(event_code>=0 && event_code<=9) loadOp(event_code);
+    else if(event_code==="+"||event_code==="-"||event_code==="/" || event_code==="." || event_code === "x"){
         if(event.type==="keydown" && event_code==="/") event.preventDefault();
-        setOperandReady(event_code);
-        parseSymbols(event_code);
-        writeExpresion(event_code);    
-    } else if(event_code==="Backspace" || event_code==="BORRAR TODO"){
-        clearAll();
-    } else if(event_code==="Enter" || event_code==="=") {
+        loadOp(event_code);    
+    } else if(event_code==="Backspace" || event_code==="BORRAR TODO") clearAllVisor();
+    else if(event_code==="Enter" || event_code==="=") {
         if(event.type==="keydown")event.preventDefault();
         setOperandReady(event_code)
         operate();
@@ -102,9 +103,13 @@ function userComunication(event){
     } 
 }
 
-window.addEventListener("keydown",userComunication);
+function init(){
+    window.addEventListener("keydown",userComunication);
 
-botones.forEach(boton => {
-    boton.addEventListener("click",userComunication); 
-});
+    botones.forEach(boton => {
+        boton.addEventListener("click",userComunication); 
+    });
+}
+
+init();
 
