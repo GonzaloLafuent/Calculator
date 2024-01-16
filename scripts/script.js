@@ -23,7 +23,7 @@ function writeExpresion(exp){
 }
 
 function setOperandReady(operator){
-    if(operator==="+"||operator==="-"||operator==="/" || operator === "*" || operator === "Enter"){
+    if(operator==="+"||operator==="-"||operator==="/" || operator === "x" || operator === "Enter" || operator==="="){
         if(!first_operand.ready) first_operand.ready = 1;
         else if(!second_operand.ready) second_operand.ready = 1;
     }
@@ -81,57 +81,30 @@ function clearAll(){
 }
 
 function userComunication(event){
-    
-}
-
-window.addEventListener("keydown",(e)=>{
-    if(e.key==="Enter") {
-        e.preventDefault();
-        setOperandReady(e.key)
+    let event_code = (event.type==="keydown")?event.key:event.target.textContent;
+    event_code = (event_code==="*")?"x":event_code;
+    if(event_code>=0 && event_code<=9){ 
+        setOperandReady(event_code);
+        parseSymbols(event_code);
+        writeExpresion(event_code);
+    } else if(event_code==="+"||event_code==="-"||event_code==="/" || event_code==="." || event_code === "x"){
+        if(event.type==="keydown" && event_code==="/") event.preventDefault();
+        setOperandReady(event_code);
+        parseSymbols(event_code);
+        writeExpresion(event_code);    
+    } else if(event_code==="Backspace" || event_code==="BORRAR TODO"){
+        clearAll();
+    } else if(event_code==="Enter" || event_code==="=") {
+        if(event.type==="keydown")event.preventDefault();
+        setOperandReady(event_code)
         operate();
         returnResult();
     } 
-}) 
+}
 
-
-window.addEventListener("keydown",(e)=>{
-    if(e.key>=0 && e.key<=9){ 
-        setOperandReady(e.key);
-        parseSymbols(e.key);
-        writeExpresion(e.key);
-    } else if(e.key==="+"||e.key==="-"||e.key==="/" || e.key==="." || e.key === "*"){
-        if(e.key==="/") e.preventDefault();
-        setOperandReady(e.key);
-        parseSymbols(e.key==="*"?"x":e.key);
-        writeExpresion(e.key==="*"?"x":e.key);    
-    } else if(e.key==="Backspace"){
-        clearAll();
-    } 
-});
-
-btn_numeros.forEach(btn => {
-    btn.addEventListener("click",(e)=>{
-        setOperandReady(e.target.textContent==="x"?"*":e.target.textContent);
-        parseSymbols(e.target.textContent);
-        writeExpresion(e.target.textContent);
-    })
-});
-
+window.addEventListener("keydown",userComunication);
 
 botones.forEach(boton => {
-    boton.addEventListener("click",(e)=>{
-        txt_btn = e.target.textContent;
-        if(txt_btn==="+"||txt_btn==="-"||txt_btn==="/" || txt_btn==="." || txt_btn === "x"){
-            setOperandReady(txt_btn==="x"?"*":txt_btn);
-            parseSymbols(txt_btn);
-            writeExpresion(txt_btn);    
-        } else if(txt_btn==="BORRAR TODO"){
-            clearAll();
-        } else if(txt_btn==="=") {
-            setOperandReady("Enter")
-            operate();
-            returnResult();
-        }
-    }); 
+    boton.addEventListener("click",userComunication); 
 });
 
