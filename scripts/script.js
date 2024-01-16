@@ -4,6 +4,8 @@ const resultado = document.querySelector(".resultado");
 const btn_operacion = document.querySelector(".btn-operacion");
 const botones = document.querySelectorAll("button");
 
+const btn_numeros = document.querySelectorAll(".btn-numero");
+
 const first_operand = {
     value: "",
     ready: 0
@@ -14,7 +16,6 @@ const second_operand = {
     ready: 0
 }
 
-/* no olviadar de modiciar que op2[0] 0 value y op2[1]= available, palica para los dos op */
 let operator = "";
 let result = "";
 
@@ -39,6 +40,7 @@ function parseSymbols(symbol){
     } else {
         if(first_operand.ready && second_operand.ready){
             operate();
+            expresion.textContent = ""+result;
             first_operand.value = ""+result;
             second_operand.ready = 0;
             second_operand.value = "";
@@ -64,6 +66,26 @@ function operate(){
     }
 }
 
+let activate_keyup = 0;
+window.addEventListener("keydown",(e)=>{
+    if(e.key==="Enter") {
+        setOperandReady(e.key)
+        operate();
+        activate_keyup = 1;
+        resultado.textContent = result;
+        expresion.textContent = result;
+        first_operand.value = ""+result; first_operand.ready = 0;
+        second_operand.value = "",second_operand.ready = 0;
+    } 
+}) 
+
+window.addEventListener("keyup",(e)=>{
+    if(e.key==="Enter"){ 
+        expresion.textContent = (activate_keyup===1)?result:expresion.textContent;
+        activate_keyup = 0;
+    }
+})
+
 window.addEventListener("keydown",(e)=>{
     if(e.key>=0 && e.key<=9){ 
         setOperandReady(e.key);
@@ -79,23 +101,22 @@ window.addEventListener("keydown",(e)=>{
         first_operand.value = ""; first_operand.ready = 0;
         second_operand.value = ""; second_operand.ready = 0;
         resultado.textContent = "";
-    } else if(e.key==="Enter") {
-        setOperandReady(e.key)
-        operate();
-        resultado.textContent = result;
-        first_operand.value = ""+result; first_operand.ready = 0;
-        second_operand.value = "",second_operand.ready = 0;
-    }    
+    } 
 });
+
+btn_numeros.forEach(btn => {
+    btn.addEventListener("click",(e)=>{
+        setOperandReady(e.target.textContent==="x"?"*":e.target.textContent);
+        parseSymbols(e.target.textContent);
+        writeExpresion(e.target.textContent);
+    })
+});
+
 
 botones.forEach(boton => {
     boton.addEventListener("click",(e)=>{
         txt_btn = e.target.textContent;
-        if(txt_btn>=0 && txt_btn<=9){ 
-            setOperandReady(txt_btn==="x"?"*":txt_btn);
-            parseSymbols(txt_btn);
-            writeExpresion(txt_btn);
-        } else if(txt_btn==="+"||txt_btn==="-"||txt_btn==="/" || txt_btn==="." || txt_btn === "x"){
+        if(txt_btn==="+"||txt_btn==="-"||txt_btn==="/" || txt_btn==="." || txt_btn === "x"){
             setOperandReady(txt_btn==="x"?"*":txt_btn);
             parseSymbols(txt_btn);
             writeExpresion(txt_btn);    
@@ -105,13 +126,14 @@ botones.forEach(boton => {
             first_operand.value = ""; first_operand.ready = 0;
             second_operand.value = ""; second_operand.ready = 0;
             resultado.textContent = "";
+            document.querySelector("#btn-igual").click();
         } else if(txt_btn==="=") {
             setOperandReady("Enter")
             operate();
             resultado.textContent = result;
             first_operand.value = ""+result; first_operand.ready = 0;
             second_operand.value = "",second_operand.ready = 0;
-        }    
-    });
+        }
+    }); 
 });
 
