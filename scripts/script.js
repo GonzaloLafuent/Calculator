@@ -1,4 +1,3 @@
-const visor = document.querySelector(".visor");
 const expresion = document.querySelector(".expresion");
 const resultado = document.querySelector(".resultado");
 const btn_operacion = document.querySelector(".btn-operacion");
@@ -40,8 +39,8 @@ function parseSymbols(symbol){
     } else {
         if(first_operand.ready && second_operand.ready){
             operate();
-            expresion.textContent = ""+result;
-            first_operand.value = ""+result;
+            expresion.textContent = result.toString();
+            first_operand.value = result.toString();
             second_operand.ready = 0;
             second_operand.value = "";
         }    
@@ -66,25 +65,34 @@ function operate(){
     }
 }
 
-let activate_keyup = 0;
+function returnResult(){
+    resultado.textContent = result;
+    expresion.textContent = result;
+    first_operand.value = result.toString(); first_operand.ready = 0;
+    second_operand.value = "",second_operand.ready = 0;
+}
+
+function clearAll(){
+    expresion.textContent = "";
+    result = "";
+    first_operand.value = ""; first_operand.ready = 0;
+    second_operand.value = ""; second_operand.ready = 0;
+    resultado.textContent = "";
+}
+
+function userComunication(event){
+    
+}
+
 window.addEventListener("keydown",(e)=>{
     if(e.key==="Enter") {
+        e.preventDefault();
         setOperandReady(e.key)
         operate();
-        activate_keyup = 1;
-        resultado.textContent = result;
-        expresion.textContent = result;
-        first_operand.value = ""+result; first_operand.ready = 0;
-        second_operand.value = "",second_operand.ready = 0;
+        returnResult();
     } 
 }) 
 
-window.addEventListener("keyup",(e)=>{
-    if(e.key==="Enter"){ 
-        expresion.textContent = (activate_keyup===1)?result:expresion.textContent;
-        activate_keyup = 0;
-    }
-})
 
 window.addEventListener("keydown",(e)=>{
     if(e.key>=0 && e.key<=9){ 
@@ -92,15 +100,12 @@ window.addEventListener("keydown",(e)=>{
         parseSymbols(e.key);
         writeExpresion(e.key);
     } else if(e.key==="+"||e.key==="-"||e.key==="/" || e.key==="." || e.key === "*"){
+        if(e.key==="/") e.preventDefault();
         setOperandReady(e.key);
         parseSymbols(e.key==="*"?"x":e.key);
         writeExpresion(e.key==="*"?"x":e.key);    
     } else if(e.key==="Backspace"){
-        expresion.textContent = "";
-        result = "";
-        first_operand.value = ""; first_operand.ready = 0;
-        second_operand.value = ""; second_operand.ready = 0;
-        resultado.textContent = "";
+        clearAll();
     } 
 });
 
@@ -121,18 +126,11 @@ botones.forEach(boton => {
             parseSymbols(txt_btn);
             writeExpresion(txt_btn);    
         } else if(txt_btn==="BORRAR TODO"){
-            expresion.textContent = "";
-            result = "";
-            first_operand.value = ""; first_operand.ready = 0;
-            second_operand.value = ""; second_operand.ready = 0;
-            resultado.textContent = "";
-            document.querySelector("#btn-igual").click();
+            clearAll();
         } else if(txt_btn==="=") {
             setOperandReady("Enter")
             operate();
-            resultado.textContent = result;
-            first_operand.value = ""+result; first_operand.ready = 0;
-            second_operand.value = "",second_operand.ready = 0;
+            returnResult();
         }
     }); 
 });
