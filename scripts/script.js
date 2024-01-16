@@ -2,10 +2,6 @@ const visor = document.querySelector(".visor");
 const expresion = document.querySelector(".expresion");
 const resultado = document.querySelector(".resultado");
 const btn_operacion = document.querySelector(".btn-operacion");
-const btn_numero = document.querySelector(".btn-numero");
-const btn_punto = document.querySelector(".btn-punto");
-const btn_borrar_todo = document.querySelector(".btn-borrar-todo");
-const btn_borrar = document.querySelector(".btn-borrar")
 const botones = document.querySelectorAll("button");
 
 const first_operand = {

@@ -54,8 +54,8 @@ body{
                 align-items: center;
             }
 
-                .btn-borrar-todo, .btn-borrar{
-                    padding: 10px 52px 10px 52px;
+                .btn-borrar-todo{
+                    padding: 14px 135px 18px 135px;
                     margin: 5px 5px 15px 5px;
                     border: 2px solid #332941;
                     background-color: #FF9843;
